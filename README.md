@@ -12,6 +12,9 @@
 git clone https://github.com/zhong1016/feastogether.git
 cd ./feastogether
 ```
+
+修改 config.ini 相關資料
+
 Docker :
 
 ```bash
@@ -25,8 +28,6 @@ Local :
 ```bash
 go mod download
 ```
-
-修改 config.ini 相關資料
 
 執行程式 :
 
