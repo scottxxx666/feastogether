@@ -128,7 +128,7 @@ func SaveBooking(act string, token string, payload config.RestaurantConfig) stri
 		MealSeq:    4,
 		Special:    0,
 		ChildSeat:  0,
-		Adult:      2,
+		Adult:      payload.PeopleCount,
 		Child:      0,
 		ChargeList: []struct {
 			Seq   int "json:\"seq\""
