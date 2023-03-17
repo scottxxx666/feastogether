@@ -23,7 +23,7 @@ func main() {
 
 	// 立即定位 , 取得定位開始 - 過期時間
 	expirationTime := client.GetSaveSeats(
-		cfg.UserConfig.Account,
+		cfg.UserConfig,
 		token,
 		cfg.RestaurantConfig)
 
@@ -31,7 +31,7 @@ func main() {
 	if expirationTime != "" {
 		// 確認定位
 		msg := client.SaveBooking(
-			cfg.UserConfig.Account,
+			cfg.UserConfig,
 			client.GetToken(cfg.UserConfig),
 			cfg.RestaurantConfig)
 

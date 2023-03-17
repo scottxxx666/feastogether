@@ -5,6 +5,7 @@ import (
 	"feastogether/config"
 	"feastogether/fetch"
 	"log"
+	"strings"
 )
 
 // api
@@ -12,6 +13,7 @@ const (
 	LOGIN_API      = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/custSignIn"
 	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
 	SAVE_SAETS_API = "https://www.feastogether.com.tw/api/booking/saveSaets"
+	B00KING_API    = "https://www.feastogether.com.tw/api/booking/b00king"
 	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
 )
 
@@ -29,7 +31,7 @@ func GetToken(user config.UserConfig) string {
 		return ""
 	}
 
-	resp, err := fetch.Post(LOGIN_API, payloadBytes, payload.Act, "")
+	resp, err := fetch.Post(LOGIN_API, payloadBytes, user, "")
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -48,10 +50,10 @@ func GetToken(user config.UserConfig) string {
 	return data.Result.CustomerLoginResp.Token
 }
 
-// 不清楚是什麼
-func GetSaveSaets(act string, token string) string {
+// 取得驗證序號
+func GetSaveSaets(user config.UserConfig, token string) string {
 
-	resp, err := fetch.Post(SAVE_SAETS_API, nil, act, token)
+	resp, err := fetch.Post(SAVE_SAETS_API, nil, user, token)
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -66,14 +68,14 @@ func GetSaveSaets(act string, token string) string {
 	}
 
 	if data.StatusCode != 1000 {
-		log.Println(data)
+		log.Printf("取得驗證序號失敗 : %v\n", data)
 		return ""
 	}
 	return data.Result
 }
 
 // 立即定位
-func GetSaveSeats(act string, token string, payload config.RestaurantConfig) string {
+func GetSaveSeats(user config.UserConfig, token string, payload config.RestaurantConfig) string {
 
 	saveSeats := SaveSeats{
 		StoreID:     payload.StoreID,
@@ -85,8 +87,8 @@ func GetSaveSeats(act string, token string, payload config.RestaurantConfig) str
 		Zkde:        nil,
 	}
 
-	if saets := GetSaveSaets(act, token); saets != "" {
-		saveSeats.Zkde = saets
+	if saets := GetSaveSaets(user, token); saets != "" {
+		saveSeats.Zkde = strings.ReplaceAll(saets, "I", "l")
 	}
 
 	payloadBytes, err := json.Marshal(saveSeats)
@@ -95,7 +97,7 @@ func GetSaveSeats(act string, token string, payload config.RestaurantConfig) str
 		return ""
 	}
 
-	resp, err := fetch.Post(SAVE_SEATS_API, payloadBytes, act, token)
+	resp, err := fetch.Post(SAVE_SEATS_API, payloadBytes, user, token)
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -117,19 +119,44 @@ func GetSaveSeats(act string, token string, payload config.RestaurantConfig) str
 	return data.Result.ExpirationTime
 }
 
+// 取得驗證序號
+func GetB00king(user config.UserConfig, token string) string {
+
+	resp, err := fetch.Post(B00KING_API, nil, user, token)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	defer resp.Body.Close()
+
+	var data SaveSaetsResponse
+	if json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		log.Printf("Failed to decode response body: %v\n", err)
+		return ""
+	}
+
+	if data.StatusCode != 1000 {
+		log.Printf("取得驗證序號失敗 : %v\n", data)
+		return ""
+	}
+	return data.Result
+}
+
 // 送出定位
-func SaveBooking(act string, token string, payload config.RestaurantConfig) string {
+func SaveBooking(user config.UserConfig, token string, payload config.RestaurantConfig) string {
 
 	booking := Booking{
-		StoreID:    payload.StoreID,
-		MealPeriod: payload.MealPeriod,
-		MealDate:   payload.MealDate,
-		MealTime:   payload.MealTime,
-		MealSeq:    4,
-		Special:    0,
-		ChildSeat:  0,
-		Adult:      payload.PeopleCount,
-		Child:      0,
+		StoreID:     payload.StoreID,
+		MealPeriod:  payload.MealPeriod,
+		MealDate:    payload.MealDate,
+		MealTime:    payload.MealTime,
+		MealPurpose: "",
+		MealSeq:     4,
+		Special:     0,
+		ChildSeat:   0,
+		Adult:       payload.PeopleCount,
+		Child:       0,
 		ChargeList: []struct {
 			Seq   int "json:\"seq\""
 			Count int "json:\"count\""
@@ -150,6 +177,7 @@ func SaveBooking(act string, token string, payload config.RestaurantConfig) stri
 		Domain:       "https://www.feastogether.com.tw",
 		PathFir:      "booking",
 		PathSec:      "result",
+		YuuO:         GetB00king(user, token),
 	}
 
 	payloadBytes, err := json.Marshal(booking)
@@ -158,7 +186,7 @@ func SaveBooking(act string, token string, payload config.RestaurantConfig) stri
 		return ""
 	}
 
-	resp, err := fetch.Post(BOOKING_API, payloadBytes, act, token)
+	resp, err := fetch.Post(BOOKING_API, payloadBytes, user, token)
 	if err != nil {
 		log.Println(err)
 		return ""

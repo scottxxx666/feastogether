@@ -7,8 +7,10 @@ import (
 )
 
 type UserConfig struct {
-	Account  string `json:"account"`
-	Password string `json:"password"`
+	Account       string `json:"account"`
+	Password      string `json:"password"`
+	Ga            string `json:"ga"`
+	Ga_9PQXQP3QD6 string `json:"ga_9PQXQP3QD6"`
 }
 
 type RestaurantConfig struct {

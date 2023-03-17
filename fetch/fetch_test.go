@@ -2,8 +2,10 @@ package fetch_test
 
 import (
 	"encoding/json"
+	"feastogether/config"
 	"feastogether/fetch"
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -19,27 +21,32 @@ type Situation struct {
 }
 
 func TestPost(t *testing.T) {
-	situation := Situation{
-		StoreID:     "S2212290010",
-		MealPeriod:  "dinner",
-		PeopleCount: 2,
-	}
+	if cfg, err := config.GetConfig(".."); err != nil {
+		log.Println(err)
+	} else {
 
-	payload, err := json.Marshal(situation)
-	if err != nil {
-		panic("Failed to marshal struct to JSON: " + err.Error())
-	}
+		situation := Situation{
+			StoreID:     "S2212290010",
+			MealPeriod:  "dinner",
+			PeopleCount: 2,
+		}
 
-	resp, err := fetch.Post(API, payload, "", "")
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
+		payload, err := json.Marshal(situation)
+		if err != nil {
+			panic("Failed to marshal struct to JSON: " + err.Error())
+		}
 
-	var data map[string]interface{}
-	if err = json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		panic(err)
-	}
+		resp, err := fetch.Post(API, payload, cfg.UserConfig, "")
+		if err != nil {
+			panic(err)
+		}
+		defer resp.Body.Close()
 
-	fmt.Println(data)
+		var data map[string]interface{}
+		if err = json.NewDecoder(resp.Body).Decode(&data); err != nil {
+			panic(err)
+		}
+
+		fmt.Println(data)
+	}
 }

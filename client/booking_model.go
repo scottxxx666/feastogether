@@ -93,4 +93,5 @@ type Booking struct {
 	Domain       string `json:"domain"`
 	PathFir      string `json:"pathFir"`
 	PathSec      string `json:"pathSec"`
+	YuuO         string `json:"yuuO"`
 }
