@@ -6,6 +6,10 @@
 
 請勿將本程式用於非法用途或從事任何違法活動( EX : 蝦皮販賣定位轉讓 )，任何因使用本程式而從事違法活動所導致的法律責任由使用者自行承擔，開發者概不負責。
 
+### 訂位紀錄 ✨
+
+![](./images/detail.jpg)
+
 ### 開始 ✨
 
 ```bash
@@ -25,6 +29,7 @@ docker run --rm -it feastogether
 Local :
 
 下載相關依賴
+
 ```bash
 go mod download
 ```
@@ -34,7 +39,6 @@ go mod download
 ```bash
 go run main.go
 ```
-
 
 ### 目錄結構 ✨
 
