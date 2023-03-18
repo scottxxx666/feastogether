@@ -50,15 +50,8 @@ docker run --rm -it feastogether
 
 Local :
 
-下載相關依賴
-
 ```bash
 go mod download
-```
-
-執行程式 :
-
-```bash
 go run main.go
 ```
 
