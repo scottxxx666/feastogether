@@ -8,7 +8,8 @@
 
 ### 訂位紀錄 ✨
 
-![](./images/detail.jpg)
+![](./images/inparadise.jpg)
+![](./images/xujisunrise.jpg)
 
 ### 開始 ✨
 
