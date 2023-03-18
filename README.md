@@ -12,12 +12,34 @@
 
 ### 開始 ✨
 
+1.Clone 此專案：
+
 ```bash
 git clone https://github.com/zhong1016/feastogether.git
 cd ./feastogether
 ```
 
-修改 config.ini 相關資料
+2.修改 `config.ini` 相關資料：
+
+請先在 [饗賓餐旅訂位系統](https://www.feastogether.com.tw/) 取得您的用戶帳號與密碼
+
+```ini
+
+[user]
+account = <你的用戶帳號>
+password = <你的用戶密碼>
+ga = <你的 GA cookie>
+ga_9PQXQP3QD6 = <你的 GA_9PQXQP3QD6 cookie>
+
+[restaurant]
+storeID = <餐廳 ID>
+peopleCount = <用餐人數>
+mealPeriod = <用餐時段：lunch、tea、dinner>
+mealDate = <用餐日期：yyyy-mm-dd>
+mealTime = <用餐時間：11:30、12:30、14:30、17:30、18:00、18:30>
+```
+
+3.執行程式 ：
 
 Docker :
 
@@ -56,3 +78,7 @@ go run main.go
 ### 最後 ✨
 
 如果此作品有幫助到你/妳，請給我一個 Star！它會使我更有動力 ：）
+
+### 授權 ✨
+
+[MIT](./LICENSE)
