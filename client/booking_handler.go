@@ -17,6 +17,15 @@ const (
 	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
 )
 
+var MealSeqMap = map[string]int{
+	"11:30": 1,
+	"12:30": 1,
+	"14:30": 3,
+	"17:30": 4,
+	"18:00": 4,
+	"18:30": 4,
+}
+
 // 取得 Token
 func GetToken(user config.UserConfig) string {
 
@@ -83,7 +92,7 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 		MealPeriod:  payload.MealPeriod,
 		MealDate:    payload.MealDate,
 		MealTime:    payload.MealTime,
-		MealSeq:     4,
+		MealSeq:     MealSeqMap[payload.MealTime],
 		Zkde:        nil,
 	}
 
@@ -152,7 +161,7 @@ func SaveBooking(user config.UserConfig, token string, payload config.Restaurant
 		MealDate:    payload.MealDate,
 		MealTime:    payload.MealTime,
 		MealPurpose: "",
-		MealSeq:     4,
+		MealSeq:     MealSeqMap[payload.MealTime],
 		Special:     0,
 		ChildSeat:   0,
 		Adult:       payload.PeopleCount,
