@@ -2,16 +2,22 @@ package config_test
 
 import (
 	"feastogether/config"
-	"fmt"
-	"log"
 	"testing"
 )
 
 func TestGetConfig(t *testing.T) {
-
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
-	} else {
-		fmt.Println(cfg)
+	config, err := config.GetConfig("..")
+	if err != nil {
+		t.Errorf("Failed to load config file: %v", err)
 	}
+
+	if config.UserConfig.Account == "" {
+		t.Errorf("UserConfig.Account is empty")
+	}
+
+	if config.RestaurantConfig.StoreID == "" {
+		t.Errorf("RestaurantConfig.StoreID is empty")
+	}
+
+	t.Log(config)
 }

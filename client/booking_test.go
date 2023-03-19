@@ -3,60 +3,71 @@ package client_test
 import (
 	"feastogether/client"
 	"feastogether/config"
-	"fmt"
 	"log"
 	"testing"
 )
 
+var cfg *config.Config
+
+func init() {
+	var err error
+	cfg, err = config.GetConfig("..")
+	if err != nil {
+		log.Panicf("Failed to load config file: %v", err)
+	}
+}
+
 func TestGetToken(t *testing.T) {
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
+	if token := client.GetToken(cfg.UserConfig); token == "" {
+		t.Errorf("Failed to get token")
 	} else {
-		fmt.Println(client.GetToken(cfg.UserConfig))
+		t.Log(token)
 	}
 }
 
 func TestGetSaveSaets(t *testing.T) {
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
+	if saveSaets := client.GetSaveSaets(
+		cfg.UserConfig,
+		client.GetToken(cfg.UserConfig)); saveSaets == "" {
+		t.Errorf("Failed to get saveSaets")
 	} else {
-		fmt.Println(client.GetSaveSaets(
-			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig)))
+		t.Log(saveSaets)
 	}
 }
+
 func TestGetSaveSeats(t *testing.T) {
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
+	if saveSeats := client.GetSaveSeats(
+		cfg.UserConfig,
+		client.GetToken(cfg.UserConfig),
+		cfg.RestaurantConfig); saveSeats == "" {
+		t.Errorf("Failed to get saveSeats")
 	} else {
-		fmt.Println(client.GetSaveSeats(
-			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig),
-			cfg.RestaurantConfig))
+		t.Log(saveSeats)
 	}
 }
+
 func TestB00king(t *testing.T) {
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
+	if b00king := client.GetB00king(
+		cfg.UserConfig,
+		client.GetToken(cfg.UserConfig)); b00king == "" {
+		t.Errorf("Failed to get b00king")
 	} else {
-		fmt.Println(client.GetB00king(
-			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig)))
+		t.Log(b00king)
 	}
 }
+
 func TestSaveBooking(t *testing.T) {
+	client.GetSaveSeats(
+		cfg.UserConfig,
+		client.GetToken(cfg.UserConfig),
+		cfg.RestaurantConfig)
 
-	if cfg, err := config.GetConfig(".."); err != nil {
-		log.Println(err)
+	if booking := client.SaveBooking(
+		cfg.UserConfig,
+		client.GetToken(cfg.UserConfig),
+		cfg.RestaurantConfig); booking == "" {
+		t.Errorf("Booking failed")
 	} else {
-		fmt.Println(client.GetSaveSeats(
-			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig),
-			cfg.RestaurantConfig))
-
-		fmt.Println(client.SaveBooking(
-			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig),
-			cfg.RestaurantConfig))
+		t.Log(booking)
 	}
 }
