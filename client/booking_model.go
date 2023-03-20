@@ -70,7 +70,10 @@ type SaveSeats struct {
 	MealSeq     int    `json:"mealSeq"`
 	MealDate    string `json:"mealDate"`
 	MealTime    string `json:"mealTime"`
-	Zkde        any    `json:"zkde"`
+	// Zkde        any    `json:"zkde"`
+
+	// 3/20 新參數
+	Zked any `json:"zked"`
 }
 
 type Booking struct {
@@ -93,5 +96,8 @@ type Booking struct {
 	Domain       string `json:"domain"`
 	PathFir      string `json:"pathFir"`
 	PathSec      string `json:"pathSec"`
-	YuuO         string `json:"yuuO"`
+	// YuuO         string `json:"yuuO"`
+
+	// 3/20 新參數
+	Yuuu string `json:"yuuu"`
 }

@@ -5,16 +5,19 @@ import (
 	"feastogether/config"
 	"feastogether/fetch"
 	"log"
-	"strings"
 )
 
 // api
 const (
 	LOGIN_API      = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/custSignIn"
-	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
 	SAVE_SAETS_API = "https://www.feastogether.com.tw/api/booking/saveSaets"
+	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
 	B00KING_API    = "https://www.feastogether.com.tw/api/booking/b00king"
 	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
+
+	// 新 API
+	SAVE_SAETA_API = "https://www.feastogether.com.tw/api/booking/saveSaeta"
+	BOOKNIG_API    = "https://www.feastogether.com.tw/api/booking/booknig"
 )
 
 var MealSeqMap = map[string]int{
@@ -62,7 +65,7 @@ func GetToken(user config.UserConfig) string {
 // 取得驗證序號
 func GetSaveSaets(user config.UserConfig, token string) string {
 
-	resp, err := fetch.Post(SAVE_SAETS_API, nil, user, token)
+	resp, err := fetch.Post(SAVE_SAETA_API, nil, user, token)
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -93,11 +96,17 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 		MealDate:    payload.MealDate,
 		MealTime:    payload.MealTime,
 		MealSeq:     MealSeqMap[payload.MealTime],
-		Zkde:        nil,
+		// Zkde:        nil,
+
+		// 3/20 新參數
+		Zked: nil,
 	}
 
 	if saets := GetSaveSaets(user, token); saets != "" {
-		saveSeats.Zkde = strings.ReplaceAll(saets, "I", "l")
+		// saveSeats.Zkde = strings.ReplaceAll(saets, "I", "l")
+
+		// 3/20 更新序號邏輯
+		saveSeats.Zked = saets
 	}
 
 	payloadBytes, err := json.Marshal(saveSeats)
@@ -131,7 +140,7 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 // 取得驗證序號
 func GetB00king(user config.UserConfig, token string) string {
 
-	resp, err := fetch.Post(B00KING_API, nil, user, token)
+	resp, err := fetch.Post(BOOKNIG_API, nil, user, token)
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -186,7 +195,10 @@ func SaveBooking(user config.UserConfig, token string, payload config.Restaurant
 		Domain:       "https://www.feastogether.com.tw",
 		PathFir:      "booking",
 		PathSec:      "result",
-		YuuO:         GetB00king(user, token),
+		// YuuO:         GetB00king(user, token),
+
+		// 3/20 新參數
+		Yuuu: GetB00king(user, token),
 	}
 
 	payloadBytes, err := json.Marshal(booking)
