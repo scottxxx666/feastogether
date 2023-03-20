@@ -35,7 +35,7 @@ storeID = <餐廳 ID>
 peopleCount = <用餐人數>
 mealPeriod = <用餐時段：lunch、tea、dinner>
 mealDate = <用餐日期：yyyy-mm-dd>
-mealTime = <用餐時間：11:30、12:30、14:30、17:30、18:00、18:30>
+mealTime = <用餐時間：11:30、12:00、14:30、17:30、18:00、18:30>
 ```
 
 3. 執行程式
