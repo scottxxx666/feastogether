@@ -1,4 +1,4 @@
-# feastogether
+# Feastogether
 
 ### 介绍 ✨
 

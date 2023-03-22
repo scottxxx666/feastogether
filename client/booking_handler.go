@@ -10,14 +10,14 @@ import (
 // api
 const (
 	LOGIN_API      = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/custSignIn"
-	SAVE_SAETS_API = "https://www.feastogether.com.tw/api/booking/saveSaets"
-	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
-	B00KING_API    = "https://www.feastogether.com.tw/api/booking/b00king"
-	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
+	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeatss"
+	SAVE_SAETA_API = "https://www.feastogether.com.tw/api/booking/saveSaetas"
+	BOOKNIG_API    = "https://www.feastogether.com.tw/api/booking/booknigs"
+	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/bookings"
 
-	// 新 API
-	SAVE_SAETA_API = "https://www.feastogether.com.tw/api/booking/saveSaeta"
-	BOOKNIG_API    = "https://www.feastogether.com.tw/api/booking/booknig"
+	// old api
+	SAVE_SAETS_API = "https://www.feastogether.com.tw/api/booking/saveSaets"
+	B00KING_API    = "https://www.feastogether.com.tw/api/booking/b00king"
 )
 
 var MealSeqMap = map[string]int{
