@@ -10,14 +10,16 @@ import (
 // api
 const (
 	LOGIN_API      = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/custSignIn"
-	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeatss"
+	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
 	SAVE_SAETA_API = "https://www.feastogether.com.tw/api/booking/saveSaetas"
 	BOOKNIG_API    = "https://www.feastogether.com.tw/api/booking/booknigs"
-	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/bookings"
+	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
 
 	// old api
-	SAVE_SAETS_API = "https://www.feastogether.com.tw/api/booking/saveSaets"
-	B00KING_API    = "https://www.feastogether.com.tw/api/booking/b00king"
+	BOOKINGS_API    = "https://www.feastogether.com.tw/api/booking/bookings"
+	SAVE_SEATSS_API = "https://www.feastogether.com.tw/api/booking/saveSeatss"
+	SAVE_SAETS_API  = "https://www.feastogether.com.tw/api/booking/saveSaets"
+	B00KING_API     = "https://www.feastogether.com.tw/api/booking/b00king"
 )
 
 var MealSeqMap = map[string]int{
@@ -96,18 +98,13 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 		MealDate:    payload.MealDate,
 		MealTime:    payload.MealTime,
 		MealSeq:     MealSeqMap[payload.MealTime],
-		// Zkde:        nil,
-
-		// 3/20 新參數
-		Zked: nil,
+		Zked:        "1j6ul4y94ejru6xk7vu4vu4",
 	}
 
-	if saets := GetSaveSaets(user, token); saets != "" {
-		// saveSeats.Zkde = strings.ReplaceAll(saets, "I", "l")
-
-		// 3/20 更新序號邏輯
-		saveSeats.Zked = saets
-	}
+	// 3/30 更新序號邏輯
+	// if saets := GetSaveSaets(user, token); saets != "" {
+	// 	saveSeats.Zked = saets
+	// }
 
 	payloadBytes, err := json.Marshal(saveSeats)
 	if err != nil {
@@ -195,10 +192,10 @@ func SaveBooking(user config.UserConfig, token string, payload config.Restaurant
 		Domain:       "https://www.feastogether.com.tw",
 		PathFir:      "booking",
 		PathSec:      "result",
-		// YuuO:         GetB00king(user, token),
+		// Yuuu: GetB00king(user, token),
 
-		// 3/20 新參數
-		Yuuu: GetB00king(user, token),
+		// 3/30 新參數
+		Yuuu: "892389djdj883831445",
 	}
 
 	payloadBytes, err := json.Marshal(booking)
