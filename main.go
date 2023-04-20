@@ -3,8 +3,10 @@ package main
 import (
 	"feastogether/client"
 	"feastogether/config"
-	"fmt"
 	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -21,21 +23,57 @@ func main() {
 		return
 	}
 
-	// 立即定位 , 取得定位開始 - 過期時間
-	expirationTime := client.GetSaveSeats(
-		cfg.UserConfig,
-		token,
-		cfg.RestaurantConfig)
+	// svg code , 對應驗證碼
+	var svgCode string
 
-	// 判斷是否取得訂位開始時間
-	if expirationTime != "" {
-		// 確認定位
-		msg := client.SaveBooking(
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+
+	// 返回 html
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
+
+	// 取得 svg
+	r.GET("/svg", func(c *gin.Context) {
+
+		data := client.GetSVG(cfg.UserConfig, token)
+		svgContent := data.Result.SVG
+		svgCode = data.Result.Code
+		c.Header("Content-Type", "image/svg+xml")
+		c.Writer.Write([]byte(svgContent))
+	})
+
+	// 接收驗證碼 , 然後訂位
+	r.POST("/svg", func(c *gin.Context) {
+		var Verify struct {
+			ID string `json:"verify"`
+		}
+		c.ShouldBindJSON(&Verify)
+
+		log.Println("執行訂位")
+		// 立即訂位 , 取得訂位開始 - 過期時間
+		expirationTime := client.GetSaveSeats(
 			cfg.UserConfig,
-			client.GetToken(cfg.UserConfig),
-			cfg.RestaurantConfig)
+			token,
+			cfg.RestaurantConfig,
+			svgCode,
+			Verify.ID,
+		)
 
-		fmt.Println(msg)
-	}
+		// 判斷是否取得訂位開始時間
+		if expirationTime != "" {
+			// 確認定位
+			msg := client.SaveBooking(
+				cfg.UserConfig,
+				client.GetToken(cfg.UserConfig),
+				cfg.RestaurantConfig)
+
+			log.Println(msg)
+		}
+
+	})
+
+	r.Run() // default :8080
 
 }

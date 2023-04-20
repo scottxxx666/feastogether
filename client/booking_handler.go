@@ -10,16 +10,9 @@ import (
 // api
 const (
 	LOGIN_API      = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/custSignIn"
+	FA_SVG         = "https://www.feastogether.com.tw/api/994f5388-d001-4ca4-a7b1-72750d4211cf/get2FASvgByBrand"
 	SAVE_SEATS_API = "https://www.feastogether.com.tw/api/booking/saveSeats"
-	SAVE_SAETA_API = "https://www.feastogether.com.tw/api/booking/saveSaetas"
-	BOOKNIG_API    = "https://www.feastogether.com.tw/api/booking/booknigs"
 	BOOKING_API    = "https://www.feastogether.com.tw/api/booking/booking"
-
-	// old api
-	BOOKINGS_API    = "https://www.feastogether.com.tw/api/booking/bookings"
-	SAVE_SEATSS_API = "https://www.feastogether.com.tw/api/booking/saveSeatss"
-	SAVE_SAETS_API  = "https://www.feastogether.com.tw/api/booking/saveSaets"
-	B00KING_API     = "https://www.feastogether.com.tw/api/booking/b00king"
 )
 
 var MealSeqMap = map[string]int{
@@ -65,31 +58,33 @@ func GetToken(user config.UserConfig) string {
 }
 
 // 取得驗證序號
-func GetSaveSaets(user config.UserConfig, token string) string {
+func GetSVG(user config.UserConfig, token string) *SvgResponse {
 
-	resp, err := fetch.Post(SAVE_SAETA_API, nil, user, token)
+	payload := []byte(`{"brandId":"BR00008"}`)
+
+	resp, err := fetch.Post(FA_SVG, payload, user, token)
 	if err != nil {
 		log.Println(err)
-		return ""
+		return nil
 	}
 
 	defer resp.Body.Close()
 
-	var data SaveSaetsResponse
+	var data SvgResponse
 	if json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		log.Printf("Failed to decode response body: %v\n", err)
-		return ""
+		return nil
 	}
 
 	if data.StatusCode != 1000 {
 		log.Printf("取得驗證序號失敗 : %v\n", data)
-		return ""
+		return nil
 	}
-	return data.Result
+	return &data
 }
 
 // 立即定位
-func GetSaveSeats(user config.UserConfig, token string, payload config.RestaurantConfig) string {
+func GetSaveSeats(user config.UserConfig, token string, payload config.RestaurantConfig, code string, fa string) string {
 
 	saveSeats := SaveSeats{
 		StoreID:     payload.StoreID,
@@ -99,12 +94,10 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 		MealTime:    payload.MealTime,
 		MealSeq:     MealSeqMap[payload.MealTime],
 		Zked:        "1j6ul4y94ejru6xk7vu4vu4",
-	}
 
-	// 3/30 更新序號邏輯
-	// if saets := GetSaveSaets(user, token); saets != "" {
-	// 	saveSeats.Zked = saets
-	// }
+		SvgCode:      code,
+		ScgVerifyStr: fa,
+	}
 
 	payloadBytes, err := json.Marshal(saveSeats)
 	if err != nil {
@@ -132,30 +125,6 @@ func GetSaveSeats(user config.UserConfig, token string, payload config.Restauran
 	}
 
 	return data.Result.ExpirationTime
-}
-
-// 取得驗證序號
-func GetB00king(user config.UserConfig, token string) string {
-
-	resp, err := fetch.Post(BOOKNIG_API, nil, user, token)
-	if err != nil {
-		log.Println(err)
-		return ""
-	}
-
-	defer resp.Body.Close()
-
-	var data SaveSaetsResponse
-	if json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		log.Printf("Failed to decode response body: %v\n", err)
-		return ""
-	}
-
-	if data.StatusCode != 1000 {
-		log.Printf("取得驗證序號失敗 : %v\n", data)
-		return ""
-	}
-	return data.Result
 }
 
 // 送出定位

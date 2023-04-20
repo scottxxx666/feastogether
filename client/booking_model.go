@@ -70,10 +70,10 @@ type SaveSeats struct {
 	MealSeq     int    `json:"mealSeq"`
 	MealDate    string `json:"mealDate"`
 	MealTime    string `json:"mealTime"`
-	// Zkde        any    `json:"zkde"`
+	Zked        any    `json:"zked"`
 
-	// 3/20 新參數
-	Zked any `json:"zked"`
+	SvgCode      string `json:"svgCode"`
+	ScgVerifyStr string `json:"scgVerifyStr"`
 }
 
 type Booking struct {
@@ -96,8 +96,15 @@ type Booking struct {
 	Domain       string `json:"domain"`
 	PathFir      string `json:"pathFir"`
 	PathSec      string `json:"pathSec"`
-	// YuuO         string `json:"yuuO"`
+	Yuuu         string `json:"yuuu"`
+}
 
-	// 3/20 新參數
-	Yuuu string `json:"yuuu"`
+type SvgResponse struct {
+	StatusCode int    `json:"statusCode"`
+	Timestamp  string `json:"timestamp"`
+	Message    string `json:"message"`
+	Result     struct {
+		Code string `json:"code"`
+		SVG  string `json:"svg"`
+	} `json:"result"`
 }

@@ -24,43 +24,18 @@ func TestGetToken(t *testing.T) {
 		t.Log(token)
 	}
 }
-
-func TestGetSaveSaets(t *testing.T) {
-	if saveSaets := client.GetSaveSaets(
+func TestGetSVG(t *testing.T) {
+	if svg := client.GetSVG(
 		cfg.UserConfig,
-		client.GetToken(cfg.UserConfig)); saveSaets == "" {
-		t.Errorf("Failed to get saveSaets")
+		client.GetToken(cfg.UserConfig)); svg == nil {
+		t.Errorf("svg failed")
 	} else {
-		t.Log(saveSaets)
+		t.Log(svg)
 	}
 }
 
-func TestGetSaveSeats(t *testing.T) {
-	if saveSeats := client.GetSaveSeats(
-		cfg.UserConfig,
-		client.GetToken(cfg.UserConfig),
-		cfg.RestaurantConfig); saveSeats == "" {
-		t.Errorf("Failed to get saveSeats")
-	} else {
-		t.Log(saveSeats)
-	}
-}
-
-func TestB00king(t *testing.T) {
-	if b00king := client.GetB00king(
-		cfg.UserConfig,
-		client.GetToken(cfg.UserConfig)); b00king == "" {
-		t.Errorf("Failed to get b00king")
-	} else {
-		t.Log(b00king)
-	}
-}
-
+// 要先取得 SVG 驗證後執行 GetSaveSeats 取得訂位開始時間
 func TestSaveBooking(t *testing.T) {
-	client.GetSaveSeats(
-		cfg.UserConfig,
-		client.GetToken(cfg.UserConfig),
-		cfg.RestaurantConfig)
 
 	if booking := client.SaveBooking(
 		cfg.UserConfig,

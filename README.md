@@ -44,7 +44,7 @@ Docker
 
 ```bash
 docker build -t feastogether .
-docker run --rm -it feastogether
+docker run -it -p 8080:8080 feastogether
 ```
 
 Local
@@ -53,6 +53,10 @@ Local
 go mod download
 go run main.go
 ```
+
+4. 輸入驗證
+
+請先在瀏覽器訪問 `http://localhost:8080`，然後輸入圖片上的驗證碼後按下訂位
 
 ### 目錄結構 ✨
 

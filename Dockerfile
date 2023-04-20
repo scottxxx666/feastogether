@@ -7,6 +7,9 @@ WORKDIR /app
 # 將本機目錄中的所有檔案複製到容器中的 /app 目錄中
 COPY . .
 
+# 暴露的端口
+EXPOSE 8080
+
 # 下載應用程式的相依套件
 RUN go mod download
 
