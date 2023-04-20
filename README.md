@@ -47,6 +47,12 @@ docker build -t feastogether .
 docker run -it -p 8080:8080 feastogether
 ```
 
+Docker-compose
+
+```bash
+docker-compose up
+```
+
 Local
 
 ```bash
